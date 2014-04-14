@@ -10,7 +10,7 @@ except ImportError:
     print "oops, the import didn't work"
     sys.exit()
 
-# This script...
+# This script will create sets from imported gff files.
 
 def usage():
     print "compareGFF3.py <.gff 1> <.gff 2>"
