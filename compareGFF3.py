@@ -10,7 +10,7 @@ except ImportError:
     print "oops, the import didn't work"
     sys.exit()
 
-# This script will create sets from imported gff files.
+# This script will compare the start and stop locations of genes in a gff file
 
 def usage():
     print "compareGFF3.py <.gff 1> <.gff 2>"
@@ -19,10 +19,7 @@ if len(sys.argv) != 3:
     usage()
     sys.exit()
 
-
-
-
-#Separate genes into categories based on strand and feature type
+#Create dictionary containing start and stop locations for each feature
 def read_gff(infileName):
 	pCDS = IntervalSet()
 	mCDS = IntervalSet()
@@ -31,7 +28,8 @@ def read_gff(infileName):
 	prRNA = IntervalSet()
 	mtRNA = IntervalSet()
 
-	for line in infileName:
+	infile = open(infileName, 'r')
+	for line in infile:
         	line = line.strip()
         	entries = line.split()
         	strand = entries[7]
@@ -61,10 +59,23 @@ def read_gff(infileName):
 	gffDict['prRNA'] = ptRNA
 	gffDict['mrRNA'] = mtRNA
 	
-	return gffDict
+	infile.close()
 
+	return gffDict
 
 gffDict1 = read_gff(sys.argv[1])
 gffDict2 = read_gff(sys.argv[2])
 
+#Write files
+
+for key in gffDict1:
+	outfile = open(key + "1", 'w')
+	for i in (gffDict1[key] - gffDict2[key]):
+		outfile.write(i + '\n')
+	outfile.close()
+for key in gffDict1:
+	outfile = open(key + "2", 'w') 
+	for i in (gffDict2[key] - gffDict1[key]):
+		outfile.write(i + '\n')
+	outfile.close()
 
