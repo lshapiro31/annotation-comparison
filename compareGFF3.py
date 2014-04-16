@@ -20,35 +20,51 @@ if len(sys.argv) != 3:
     sys.exit()
 
 
-pCDS = IntervalSet []
-mCDS = IntervalSet []
-ptRNA = IntervalSet []
-mtRNA = IntervalSet []
-prRNA = IntervalSet []
-mtRNA = IntervalSet []
 
-infile = open(sys.argv[1], "r")
 
 #Separate genes into categories based on strand and feature type
-for line in infile:
-        line = line.strip()
-        entries = line.split()
-        strand = entries[7]
-        feature = entries[2]
-        start = entries[3]
-        stop = entires[4]
+def read_gff(infileName):
+	pCDS = IntervalSet()
+	mCDS = IntervalSet()
+	ptRNA = IntervalSet()
+	mtRNA = IntervalSet()
+	prRNA = IntervalSet()
+	mtRNA = IntervalSet()
 
-        if strand == "+":
-                if feature == "CDS":
-                        pCDS.add(Interval(start,stop))
-                elif feature == "tRNA":
-                        ptRNA.add(Interval(start,stop))
-                else:
-                        prRNA.add(Interval(start,stop))
-        else:
-                if feature == "CDS":
-                        mCDS.add(Interval(start,stop))
-                elif feature == "tRNA":
-                        mtRNA.add(Interval(start,stop))
-                else:
-                        mrRNA.add(Interval(start,stop))
+	for line in infileName:
+        	line = line.strip()
+        	entries = line.split()
+        	strand = entries[7]
+        	feature = entries[2]
+        	start = entries[3]
+        	stop = entires[4]
+
+        	if strand == "+":
+                	if feature == "CDS":
+                        	pCDS.add(Interval(start,stop))
+                	elif feature == "tRNA":
+                        	ptRNA.add(Interval(start,stop))
+                	else:
+                        	prRNA.add(Interval(start,stop))
+        	else:
+                	if feature == "CDS":
+                        	mCDS.add(Interval(start,stop))
+                	elif feature == "tRNA":
+                        	mtRNA.add(Interval(start,stop))
+                	else:
+                        	mrRNA.add(Interval(start,stop))
+	gffDict = {}
+	gffDict['pCDS'] = pCDS
+	gffDict['mCDS'] = mCDS
+	gffDict['ptRNA'] = ptRNA
+	gffDict['mtRNA'] = mtRNA
+	gffDict['prRNA'] = ptRNA
+	gffDict['mrRNA'] = mtRNA
+	
+	return gffDict
+
+
+gffDict1 = read_gff(sys.argv[1])
+gffDict2 = read_gff(sys.argv[2])
+
+
