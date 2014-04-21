@@ -34,8 +34,8 @@ def read_gff(infileName):
         	entries = line.split()
         	strand = entries[6]
         	feature = entries[2]
-        	start = entries[3]
-        	stop = entries[4]
+        	start = int(entries[3])
+        	stop = int(entries[4])
         	if strand == "+":
                		if feature == "CDS":
                	        	pCDS.add(Interval(start,stop))
@@ -58,11 +58,11 @@ prefix = os.path.splitext(sys.argv[1])[0]+ "_" + os.path.splitext(sys.argv[2])[0
 for key in gffDict1:
 	outfile = open(prefix + key + "1", 'w')
 	for i in (gffDict1[key] - gffDict2[key]):
-		outfile.write(i.lower_bound +'\t' +i.upper_bound + '\n')
+		outfile.write(str(i.lower_bound) +'\t' +str(i.upper_bound) + '\n')
 	outfile.close()
 for key in gffDict1:
 	outfile = open(prefix + key + "2", 'w') 
 	for i in (gffDict2[key] - gffDict1[key]):
-		outfile.write(i.lower_bound + '\t' + i.upper_bound + '\n')
+		outfile.write(str(i.lower_bound) + '\t' + str(i.upper_bound) + '\n')
 	outfile.close()
 
